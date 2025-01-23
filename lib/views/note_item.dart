@@ -17,8 +17,8 @@ class NoteItem extends StatefulWidget {
 
   final int index;
   final Map<String, dynamic> note;
-  final List<bool> isFavorite;
-  final List<bool> isArchived;
+  final bool isFavorite;
+  final bool isArchived;
   final void Function(bool) onArchiveToggle;
   final void Function(bool) onFavoriteToggle;
   final VoidCallback onDelete; // Callback for deletion
@@ -55,101 +55,125 @@ class _NoteItemState extends State<NoteItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: Colors.grey[100],
-          border: Border.all(color: Colors.grey),
-        ),
-        child: Padding(
+      child: GestureDetector(
+        onTap: ()async{
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditNote(
+                noteId: widget.note['id'],
+                initialTitle: widget.note['title'],
+                initialContent: widget.note['note'],
+              ),
+            ),
+          );
+
+          if (result == true) {
+            setState(() {
+              // Refresh the UI after editing
+              widget.onFavoriteToggle(false);
+            });
+          }
+        },
+        child: Container(
+          width: 200,
           padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.note['title'],
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                widget.note['note'],
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color.fromARGB(255, 134, 127, 127),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      widget.isFavorite[widget.index] ? Icons.favorite : Icons.favorite_border,
-                      size: 24,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      widget.onFavoriteToggle(!widget.isFavorite[widget.index]);
-                    },
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.grey[100],
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.note['title'],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  IconButton(
-                    icon: Icon(
-                      widget.isArchived[widget.index] ? Icons.bookmark : Icons.bookmark_border,
-                      size: 24,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      widget.onArchiveToggle(!widget.isArchived[widget.index]);
-                    },
+                ),
+                Text(
+                  widget.note['note'],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 134, 127, 127),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.edit_note_outlined ,
-                      size: 24,
-                      color: Colors.red,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        widget.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border, // Use sing                      size: 24,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        widget.onFavoriteToggle(!widget.isFavorite);
+                      },
                     ),
-                    onPressed: () async {
-                      final result = await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditNote(
-                            noteId: widget.note['id'],
-                            initialTitle: widget.note['title'],
-                            initialContent: widget.note['note'],
+                    IconButton(
+                      icon: Icon(
+                        widget.isArchived
+                            ? Icons.archive
+                            : Icons.archive_outlined,
+                        size: 24,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        widget.onArchiveToggle(!widget.isArchived);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit_note_outlined ,
+                        size: 24,
+                        color: Colors.red,
+                      ),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditNote(
+                              noteId: widget.note['id'],
+                              initialTitle: widget.note['title'],
+                              initialContent: widget.note['note'],
+                            ),
                           ),
-                        ),
-                      );
+                        );
 
-                      if (result == true) {
-                        setState(() {
-                          // Refresh the UI after editing
-                          widget.onFavoriteToggle(false);
-                        });
-                      }
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete ,
-                      size: 24,
-                      color: Colors.red,
+                        if (result == true) {
+                          setState(() {
+                            // Refresh the UI after editing
+                            widget.onFavoriteToggle(false);
+                          });
+                        }
+                      },
                     ),
-                    onPressed: () async {
-                      await deleteNote();
-                    },
-                  ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete ,
+                        size: 24,
+                        color: Colors.red,
+                      ),
+                      onPressed: () async {
+                        await deleteNote();
+                      },
+                    ),
 
 
 
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

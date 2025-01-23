@@ -103,7 +103,18 @@ class DBHelper {
     }
     return null;
   }
-
+  static Future<List<Map<String, dynamic>>?> getArchivedNotes() async {
+    try {
+      return await db?.query(
+        'notes',
+        where: 'isArchived = ?',
+        whereArgs: [1],
+      );
+    } catch (e) {
+      print('Update archive error : $e');
+    }
+    return null;
+  }
 
   static Future<void> updateArchiveNote(int id,bool isArchived) async {
     // Get your database instance
@@ -119,18 +130,7 @@ class DBHelper {
     }
   }
 
-  static Future<List<Map<String, dynamic>>?> getArchivedNotes() async {
-    try {
-      return await db?.query(
-        'notes',
-        where: 'isArchived = ?',
-        whereArgs: [1],
-      );
-    } catch (e) {
-      print('Update archive error : $e');
-    }
-    return null;
-  }
+
   static Future<void> unarchiveNote(int id) async {
     await db?.update(
       'notes',
@@ -139,6 +139,21 @@ class DBHelper {
       whereArgs: [id],
     );
   }
+  static Future<List<Map<String, dynamic>>> searchNotes(String query) async {
+    try {
+      final data = await db?.query(
+        'notes',
+        where: 'title LIKE ?', // Search only in the 'title' column
+        whereArgs: ['%$query%'], // Use the query parameter with wildcards
+      );
+      print('Search results: $data');
+      return data ?? [];
+    } catch (e) {
+      print('Search error: $e');
+      return [];
+    }
+  }
+
 
 
 }

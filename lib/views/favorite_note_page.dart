@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../database_helper.dart';
+import 'home_page.dart';
 
 class FavoriteNotePage extends StatefulWidget {
   const FavoriteNotePage({super.key});
@@ -31,6 +32,20 @@ class _FavoriteNotePageState extends State<FavoriteNotePage> {
         title: const Text(
           'Favorite Notes',
           style: TextStyle(color: Colors.black),
+        ),
+        leading:IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  HomePage()),
+              ).then((value) {
+                if (value == true) fetchFavoriteNotes(); // Refresh archive screen on return
+              });
+            }
         ),
       ),
       body: favoriteNotes.isEmpty

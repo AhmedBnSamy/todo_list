@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/custom_form_text_field.dart';
 import '../database_helper.dart';
 import 'home_page.dart';
 
@@ -42,7 +43,7 @@ class _EditNoteState extends State<EditNote> {
 
     if (updatedTitle.isNotEmpty && updatedContent.isNotEmpty) {
       await DBHelper.updateNote(widget.noteId, updatedTitle, updatedContent);
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  HomePage()));// Return true to indicate success
+     Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomePage()));// Return true to indicate success
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -68,21 +69,18 @@ class _EditNoteState extends State<EditNote> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
+            CustomFormTextField(
+              labelText: 'Title',
+              maxLines: 1,
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
-              ),
+              hintText: 'Title',
             ),
             const SizedBox(height: 16),
-            TextField(
+            CustomFormTextField(
+              labelText: 'Content',
+              maxLines: 16,
               controller: _contentController,
-              maxLines: 8,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-              ),
+              hintText: 'Description',
             ),
           ],
         ),

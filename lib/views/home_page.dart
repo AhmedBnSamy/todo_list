@@ -80,93 +80,128 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: notes.isEmpty
-          ? const Center(
-        child: Text(
-          'No notes',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      body:Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextFormField(
+
+              onChanged: (query) async {
+                if (query.isEmpty) {
+                  await fetchNotes();
+                } else {
+                  final searchResults = await DBHelper.searchNotes(query);
+                  setState(() {
+                    notes = searchResults;
+                  });
+                }
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Search',
+              )
+            ),
           ),
-        ),
-      )
-          : ListView.builder(
-        shrinkWrap: true,
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          isFavorite.add(false);
-          isArchived.add(false);
-          return  Dismissible(
-            key: Key(notes[index]['id'].toString()), // Unique key for each note
-            background: Container(
-              color: Colors.blue,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.archive, color: Colors.white),
+          notes.isEmpty
+            ? const Center(
+          child: Text(
+            'No notes',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            secondaryBackground: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            onDismissed: (direction) async {
-              if (direction == DismissDirection.startToEnd) {
-                await archiveNote(notes[index]['id']);
-              } else if (direction == DismissDirection.endToStart) {
-                await deleteNote(notes[index]['id']);
-              }
-              setState(() {
-                notes.removeAt(index); // Remove the note from the list
-              });
-            },
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: NoteItem(
-                onArchiveToggle: (bool isArchived) {
-                  setState(() {
-                    this.isArchived[index] = isArchived;
-                    final updatedNotes =
-                    List<Map<String, dynamic>>.from(notes);
-                    updatedNotes[index] = {
-                      ...updatedNotes[index], // Copy the original map
-                      'isArchived': isArchived ? 1 : 0, // Update the field
-                    };
-                    notes = updatedNotes;
-                    DBHelper.updateArchiveNote(
-                        notes[index]['id'], isArchived);
-                    notes.remove(notes[index]); // Update home list
-                  });
-                },
-                onFavoriteToggle: (bool isFav) {
-                  setState(() {
-                    isFavorite[index] = isFav;
-                    final updatedNotes =
-                    List<Map<String, dynamic>>.from(notes);
-                    updatedNotes[index] = {
-                      ...updatedNotes[index], // Copy the original map
-                      'isFavorite': isFav ? 1 : 0, // Update the field
-                    };
-                    notes = updatedNotes;
-                    DBHelper.updateFavoriteStatus(
-                        notes[index]['id'], isFav);
-                  });
-                },
-                note: notes[index],
-                isFavorite: isFavorite,
-                isArchived: isArchived,
-                index: index,
-                onDelete: (){
-                  setState(() async {
-                    await deleteNote(notes[index]['id']);
-                  });
-                },
+          ),
+        )
+            : ListView.builder(
+          shrinkWrap: true,
+          itemCount: notes.length,
+          itemBuilder: (context, index) {
+            isFavorite.add(false);
+            isArchived.add(false);
+            return  Dismissible(
+              key: Key(notes[index]['id'].toString()), // Unique key for each note
+              background: Container(
+                color: Colors.blue,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Icon(Icons.archive, color: Colors.white),
               ),
-            ),
-          );
-        },
-      ),
+              secondaryBackground: Container(
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              onDismissed: (direction) async {
+                if (direction == DismissDirection.startToEnd) {
+                  await archiveNote(notes[index]['id']);
+                } else if (direction == DismissDirection.endToStart) {
+                  await deleteNote(notes[index]['id']);
+                }
+                setState(() {
+                  notes.removeAt(index); // Remove the note from the list
+                });
+              },
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: NoteItem(
+                  onArchiveToggle: (bool isArchived) {
+                    setState(() {
+                      this.isArchived[index] = isArchived;
+                      final updatedNotes =
+                      List<Map<String, dynamic>>.from(notes);
+                      updatedNotes[index] = {
+                        ...updatedNotes[index], // Copy the original map
+                        'isArchived': isArchived ? 1 : 0, // Update the field
+                      };
+                      notes = updatedNotes;
+                      DBHelper.updateArchiveNote(
+                          notes[index]['id'], isArchived);
+                      notes.remove(notes[index]); // Update home list
+                    });
+                  },
+                  onFavoriteToggle: (bool isFav) {
+                    setState(() {
+                      isFavorite[index] = isFav;
+                      final updatedNotes =
+                      List<Map<String, dynamic>>.from(notes);
+                      updatedNotes[index] = {
+                        ...updatedNotes[index], // Copy the original map
+                        'isFavorite': isFav ? 1 : 0, // Update the field
+                      };
+                      notes = updatedNotes;
+                      DBHelper.updateFavoriteStatus(
+                          notes[index]['id'], isFav);
+                    });
+                  },
+                  note: notes[index],
+                  isFavorite: notes[index]['isFavorite'] ==
+                      1,
+                  isArchived: notes[index]['isArchived'] ==1,
+                  index: index,
+                  onDelete: (){
+                    setState(() async {
+                      await deleteNote(notes[index]['id']);
+                    });
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+      ],),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -183,34 +218,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-//
-//   Widget noteItem(Map<String, dynamic> note) {
-//     return Card(
-//       margin: const EdgeInsets.all(10),
-//       child: ListTile(
-//         title: Text(
-//           note['title']??'',
-//           style: const TextStyle(
-//             fontSize: 20,
-//             fontWeight: FontWeight.bold,
-//             color: Colors.black,
-//           ),
-//         ),
-//         subtitle: Text(note['note']??''),
-//         trailing: IconButton(
-//           icon: Icon(
-//
-//             isFavorite[index] ? Icons.favorite : Icons.favorite_border,
-//             color: Colors.redAccent,
-//           ),
-//           onPressed: () async {
-//
-//
-//             fetchNotes();
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
 }

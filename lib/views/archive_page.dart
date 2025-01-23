@@ -48,7 +48,7 @@ class _ArchivePageState extends State<ArchivePage> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) =>  HomePage()),
             ).then((value) {

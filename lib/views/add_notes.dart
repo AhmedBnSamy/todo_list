@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../custom_form_text_field.dart';
 import '../database_helper.dart';
 import 'home_page.dart';
 
@@ -23,7 +24,7 @@ class _AddNotesState extends State<AddNotes> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Note saved successfully!')),
       );
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  HomePage())); // Navigate back after saving
+     Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomePage())); // Navigate back after saving
     } else {
       showDialog(
         context: context,
@@ -51,7 +52,7 @@ class _AddNotesState extends State<AddNotes> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomePage()));
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -71,7 +72,7 @@ class _AddNotesState extends State<AddNotes> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: FloatingActionButton(
           onPressed: () {
-            // Add your desired functionality here
+            saveData();
           },
           backgroundColor: Colors.grey.shade100,
           child: const Icon(
@@ -100,6 +101,7 @@ class _AddNotesState extends State<AddNotes> {
                   controller: controllerTitle,
                   maxLines: 1,
                   hintText: 'Add new title',
+
                 ),
               ),
               const Text(
@@ -112,6 +114,7 @@ class _AddNotesState extends State<AddNotes> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: CustomFormTextField(
+                  labelText: 'Description' ,
                   controller: controllerDescription,
                   maxLines: 10,
                   hintText: 'Add new description',
@@ -120,36 +123,6 @@ class _AddNotesState extends State<AddNotes> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomFormTextField extends StatelessWidget {
-  const CustomFormTextField({
-    super.key,
-    required this.maxLines,
-    required this.hintText,
-    required this.controller,
-  });
-
-  final int maxLines;
-  final String hintText;
-  final TextEditingController? controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: hintText,
-        fillColor: Colors.grey.shade200,
-        filled: true,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        contentPadding: const EdgeInsets.all(20),
       ),
     );
   }
