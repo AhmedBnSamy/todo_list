@@ -24,7 +24,7 @@ class _FavoriteNotePageState extends State<FavoriteNotePage> {
     });
   }
   Future<void> unFavoriteNote(int id) async {
-    await DBHelper.updateFavoriteStatus(id, false);
+    await DBHelper.updateArchiveNote(id, false);
     fetchFavoriteNotes(); // Refresh archive list
   }
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubit/themdata_cubit.dart';
 import '../database_helper.dart';
-import 'add_notes.dart';
+import 'note_page.dart';
 import 'archive_page.dart';
 import 'favorite_note_page.dart';
 import 'note_item.dart';
@@ -17,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   List<bool> isFavorite = [];
   List<Map<String, dynamic>> notes = [];
   List<bool> isArchived = [];
+  final themeCubit = ThemeCubit();
 
   @override
   void initState() {
@@ -77,7 +80,18 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (context) => const FavoriteNotePage()),
               );
             },
-          )
+          ),
+          IconButton(
+            icon: Icon(
+              themeCubit.state == AppTheme.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () {
+              themeCubit.toggleTheme(); // Toggle theme
+            },
+          ),
+
         ],
       ),
       body:Column(
@@ -157,6 +171,7 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: NoteItem(
+                  color: notes[index]['color']??Colors.white,
                   onArchiveToggle: (bool isArchived) {
                     setState(() {
                       this.isArchived[index] = isArchived;
@@ -210,7 +225,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddNotes()),
+              MaterialPageRoute(builder: (context) => const NotePage()),
             );
           },
           child: const Icon(Icons.add),

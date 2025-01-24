@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../database_helper.dart';
-import 'edite_note.dart';
+import 'note_page.dart';
 
 class NoteItem extends StatefulWidget {
   const NoteItem({
@@ -12,10 +12,12 @@ class NoteItem extends StatefulWidget {
     required this.onFavoriteToggle,
     required this.isArchived,
     required this.onArchiveToggle,
-    required this.onDelete, // New callback for deletion
+    required this.onDelete,
+    required this.color  , // New callback for deletion
   });
 
   final int index;
+  final Color color;
   final Map<String, dynamic> note;
   final bool isFavorite;
   final bool isArchived;
@@ -60,7 +62,7 @@ class _NoteItemState extends State<NoteItem> {
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditNote(
+              builder: (context) => NotePage(
                 noteId: widget.note['id'],
                 initialTitle: widget.note['title'],
                 initialContent: widget.note['note'],
@@ -80,7 +82,7 @@ class _NoteItemState extends State<NoteItem> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey[100],
+            color: widget.color,
             border: Border.all(color: Colors.grey),
           ),
           child: Padding(
@@ -91,18 +93,11 @@ class _NoteItemState extends State<NoteItem> {
               children: [
                 Text(
                   widget.note['title'],
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge, // Use Theme.of
                 ),
                 Text(
                   widget.note['note'],
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 134, 127, 127),
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,7 +136,7 @@ class _NoteItemState extends State<NoteItem> {
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditNote(
+                            builder: (context) => NotePage(
                               noteId: widget.note['id'],
                               initialTitle: widget.note['title'],
                               initialContent: widget.note['note'],

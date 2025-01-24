@@ -9,10 +9,6 @@ android {
     namespace = "com.example.todo_list"
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 34
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

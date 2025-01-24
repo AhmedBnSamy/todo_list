@@ -28,9 +28,15 @@ class DBHelper {
     }
   }
 
-  static Future<void> insertDB(String title, String note) async {
+  static Future<void> insertDB(String title, String note, ) async {
     try {
-      await DBHelper.db!.insert('notes', {'title': title, 'note': note});
+      await DBHelper.db!.insert(
+          'notes',
+          {
+            'title': title,
+            'note' : note,
+          }
+          );
     } catch (e) {
       print('Insert error: $e');
     }
@@ -52,11 +58,14 @@ class DBHelper {
     );
   }
 
-  static Future<void> updateNote(int id, String title, String note) async {
+  static Future<void> updateNote(int id, String title, String note, ) async {
     try {
       await db?.update(
         'notes',
-        {'title': title, 'note': note},
+        {
+          'title': title,
+          'note' : note,
+        },
         where: 'id = ?',
         whereArgs: [id],
       );
@@ -154,6 +163,13 @@ class DBHelper {
     }
   }
 
-
+  static Future<void> unFavoriteNote(int id) async {
+    await db?.update(
+      'notes',
+      {'isFavorite': 0}, // Set isArchived to false (0)
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
 }
