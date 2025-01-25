@@ -114,7 +114,9 @@ class _NotePageState extends State<NotePage> {
               ? Padding(
             padding:  EdgeInsets.symmetric(vertical: 20),
             child: FloatingActionButton(
-              shape: CircleBorder(side: BorderSide(color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red)),
+              shape: CircleBorder(side: BorderSide(
+                  width: 3,
+                  color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red)),
 
           onPressed: _saveOrUpdateNote,
               backgroundColor: theme == AppTheme.light ? Colors.white : Colors.black,

@@ -229,7 +229,10 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: FloatingActionButton(
-              shape: CircleBorder(side: BorderSide(color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red)),
+              shape: CircleBorder(
+                  side: BorderSide(
+                    width: 3,
+                      color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red)),
               backgroundColor: theme == AppTheme.dark ? Colors.black : Colors.white,
               onPressed: () {
                 Navigator.pushReplacement(
@@ -239,7 +242,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Icon(
                 Icons.add,
-                color: theme == AppTheme.dark ? Color(0xff5800FF) : Colors.red,
+                color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red,
               ),
             ),
           ),
