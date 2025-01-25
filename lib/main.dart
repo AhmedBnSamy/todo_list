@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       builder: (context, theme) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme:  ThemeData.light().copyWith(
+          theme: ThemeData.light().copyWith(
             primaryColor: Colors.blue,
             appBarTheme: const AppBarTheme(
               color: Colors.blue,
@@ -44,12 +44,13 @@ class MyApp extends StatelessWidget {
             appBarTheme: const AppBarTheme(
               color: Colors.indigo,
               titleTextStyle: TextStyle(
-                color: Colors.white,
+                color: Color(0xff1d43ffff),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
+
           home: HomePage(),
         );
       },

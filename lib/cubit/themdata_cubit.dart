@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'themdata_state.dart';
 // Define the theme states
 enum AppTheme { light, dark }
+
 class ThemeCubit extends Cubit<AppTheme> {
   ThemeCubit() : super(AppTheme.light) {
     _loadTheme();

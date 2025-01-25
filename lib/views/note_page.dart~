@@ -117,7 +117,7 @@ class _NotePageState extends State<NotePage> {
               shape: CircleBorder(side: BorderSide(color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red)),
 
           onPressed: _saveOrUpdateNote,
-              backgroundColor: theme == AppTheme.light ? Colors.white : Colors.black,
+              backgroundColor: theme == AppTheme.light ? Colors.black : Colors.white,
               child: Icon(
                 Icons.edit,
                 color: theme == AppTheme.dark ? Colors.blueAccent : Colors.red,

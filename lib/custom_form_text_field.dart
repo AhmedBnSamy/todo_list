@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'cubit/themdata_cubit.dart';
 
 class CustomFormTextField extends StatelessWidget {
   const CustomFormTextField({
@@ -17,20 +18,48 @@ class CustomFormTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: hintText,
-        labelText: hintText,
-        fillColor: Colors.grey.shade100,
-        filled: true,
-        alignLabelWithHint: true,
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        contentPadding: const EdgeInsets.all(20),
-      ),
+    return BlocBuilder<ThemeCubit, AppTheme>(
+      builder: (context, theme) {
+        return TextFormField(
+          style: theme == AppTheme.light ? const TextStyle(color: Colors.black,fontWeight: FontWeight.bold) : const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+          controller: controller,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            focusColor: theme == AppTheme.light ? Colors.red : Colors.blueAccent,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(
+                color: theme == AppTheme.light ? Colors.red : Colors.blueAccent,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(
+                color: theme == AppTheme.light ? Colors.red : Colors.blueAccent,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme == AppTheme.light ? Colors.red : Colors.blueAccent,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: theme == AppTheme.light ? Colors.black : Colors.white,
+            ),
+            labelText: labelText,
+            labelStyle: TextStyle(
+              color: theme == AppTheme.light ? Colors.black : Colors.white,
+            ),
+            fillColor: theme == AppTheme.light ? Colors.white : Colors.black,
+            filled: true,
+            alignLabelWithHint: true,
+
+            contentPadding: const EdgeInsets.all(20),
+          ),
+        );
+      },
     );
   }
 }
