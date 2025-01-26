@@ -38,6 +38,11 @@ dependencies:
   dismissible_page: ^1.0.2
   flutter_bloc: ^9.0.0
   shared_preferences: ^2.4.0
+  flutter_launcher_icons: ^0.14.3
+flutter_icons:
+    android: true
+    ios: true
+    image_path: "assets/image/notes.png"
 
 dev_dependencies:
   flutter_test:
